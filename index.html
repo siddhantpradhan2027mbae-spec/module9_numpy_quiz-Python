@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 9 Test: NumPy, Numerical Computing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF2F7; --panel:#FFFFFF; --ink:#152238; --soft:#4C5A76; --faint:#8592AB; --line:#DCE3ED; --line2:#C4CEDD;
+  --teal:#1F8F7E; --teal-s:#DFF3EE; --teal-i:#0E4F44; --rose:#C65B5B; --rose-s:#FBE5E5; --rose-i:#8E3030;
+  --amber:#D98A2B; --amber-s:#FBEBD4; --amber-i:#7A4E0C; --violet:#6E56C9; --violet-s:#EEEAFB; --violet-i:#40308F;
+  --yellow:#FFD84D; --yellow-i:#4A3800; --code:#101B2D;
+  --sans:'Poppins',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif; --mono:'Fira Code',Consolas,'Courier New',monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
+.topbar{background:linear-gradient(100deg,#40308F,#6E56C9 55%,#1F8F7E);padding:14px 0}
+.wrap{max-width:860px;margin:0 auto;padding:0 20px}
+.topbar .wrap{color:#fff;font-weight:600;font-size:15px;display:flex;align-items:center;gap:10px}
+.dot{width:8px;height:8px;border-radius:50%;background:#FFD873}
+[hidden]{display:none !important}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:0 1px 2px rgba(21,34,56,.05),0 10px 26px rgba(21,34,56,.07)}
+/* start */
+.start{margin:34px 0 50px;padding:30px}
+.start h1{font-size:clamp(24px,4vw,32px);margin:0 0 8px;letter-spacing:-.01em}
+.start p{color:var(--soft);margin:0 0 14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 18px}
+.chip{font-size:12.5px;font-weight:600;padding:6px 12px;border-radius:999px;background:var(--violet-s);color:var(--violet-i)}
+.chip.t{background:var(--teal-s);color:var(--teal-i)} .chip.a{background:var(--amber-s);color:var(--amber-i)}
+.rules{margin:0 0 20px;padding-left:20px;color:var(--soft);font-size:14px}
+.rules li{margin-bottom:4px}
+.note{font-size:12.5px;color:var(--faint);margin:14px 0 0}
+.btn{font-family:var(--sans);font-weight:700;font-size:15px;color:#fff;background:var(--teal);border:0;border-radius:11px;padding:13px 28px;cursor:pointer}
+.btn:hover{filter:brightness(1.06)}
+/* quiz */
+.sticky{position:sticky;top:0;z-index:5;background:rgba(238,242,247,.95);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);padding:10px 0}
+.sticky .wrap{display:flex;align-items:center;gap:14px}
+.sticky b{font-size:13.5px;white-space:nowrap}
+.bar{flex:1;height:7px;background:var(--line);border-radius:7px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#6E56C9,#1F8F7E);transition:width .25s}
+.qcard{margin:18px 0;padding:20px}
+.qhead{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:12px}
+.qnum{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--ink)}
+.mod{font-size:11.5px;font-weight:600;color:var(--soft);background:#EDF1F7;border:1px solid var(--line);padding:3px 9px;border-radius:7px}
+.kind{font-size:10.5px;font-weight:700;letter-spacing:.04em;padding:3px 8px;border-radius:6px}
+.kind.code{background:var(--violet-s);color:var(--violet-i)} .kind.theory{background:var(--teal-s);color:var(--teal-i)}
+.pill{margin-left:auto;font-size:12px;font-weight:700;background:var(--yellow);color:var(--yellow-i);padding:4px 11px;border-radius:999px;white-space:nowrap}
+pre.code{margin:0 0 12px;background:var(--code);color:#E7EEF9;border-radius:10px;padding:13px 15px;overflow-x:auto;font-family:var(--mono);font-size:12.8px;line-height:1.65}
+.qtext{font-weight:600;margin:0 0 12px;font-size:15px}
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:11px;align-items:flex-start;text-align:left;width:100%;font-family:var(--sans);font-size:14px;color:var(--ink);background:#fff;border:1px solid var(--line2);border-radius:10px;padding:10px 12px;cursor:pointer}
+.opt:hover{background:#F7F9FC}
+.opt .letter{flex:none;width:24px;height:24px;border-radius:7px;background:#EDF1F7;font-weight:700;font-size:12.5px;display:flex;align-items:center;justify-content:center;color:var(--soft)}
+.opt .otext{white-space:pre-wrap;word-break:break-word}
+.opt .otext.mono{font-family:var(--mono);font-size:13px}
+.opt.sel{border-color:var(--teal);background:var(--teal-s)} .opt.sel .letter{background:var(--teal);color:#fff}
+.submitrow{margin:26px 0 60px;text-align:center}
+.warn{color:var(--rose-i);font-size:13.5px;font-weight:600;margin:0 0 10px}
+/* score card */
+.scorecard{margin:26px 0 20px;padding:24px 26px}
+.sc-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px}
+.sc-score{font-family:var(--mono);font-weight:500;line-height:1}
+.sc-score #score-num{font-size:64px;color:var(--ink)} .sc-score .out{font-size:24px;color:var(--faint);margin-left:6px}
+.sc-meta{text-align:right}
+.band-chip{display:inline-block;font-weight:800;font-size:15px;padding:7px 16px;border-radius:999px}
+.band-fail{background:var(--rose-s);color:var(--rose-i)} .band-good{background:var(--teal-s);color:var(--teal-i)}
+.band-great{background:var(--violet-s);color:var(--violet-i)} .band-top{background:var(--amber-s);color:var(--amber-i)}
+.sc-date{font-size:12.5px;color:var(--soft);margin-top:6px} .sc-pass{font-size:12px;color:var(--faint)}
+.sc-msg{margin:14px 0 14px;font-size:14px;color:var(--soft)}
+.sc-split{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.sc-split div{background:#F7F9FC;border:1px solid var(--line);border-radius:11px;padding:9px 13px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--soft)}
+.sc-split b{font-size:16px;color:var(--ink)}
+.sc-topics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.tchip{border-radius:11px;padding:8px 10px;font-size:11.5px;font-weight:600;border:1px solid var(--line)}
+.tchip b{display:block;font-size:15px;margin-top:1px}
+.tchip.g{background:var(--teal-s);color:var(--teal-i);border-color:#BFE6DE} .tchip.m{background:var(--amber-s);color:var(--amber-i);border-color:#F1D5AA} .tchip.r{background:var(--rose-s);color:var(--rose-i);border-color:#F1C4C4}
+.sc-foot{margin-top:12px;font-size:12px;color:var(--faint);text-align:center}
+.rev-title{margin:30px 0 4px;font-size:20px}
+.rev-sub{margin:0 0 6px;color:var(--soft);font-size:13.5px}
+.opt.ok{border-color:var(--teal);background:var(--teal-s);cursor:default} .opt.ok .letter{background:var(--teal);color:#fff}
+.opt.bad{border-color:var(--rose);background:var(--rose-s);cursor:default} .opt.bad .letter{background:var(--rose);color:#fff}
+.opt.dim{cursor:default;opacity:.75}
+.tag{margin-left:auto;font-size:11px;font-weight:700;white-space:nowrap;padding-top:3px}
+.opt.ok .tag{color:var(--teal-i)} .opt.bad .tag{color:var(--rose-i)}
+.why{margin-top:12px;background:#F7F9FC;border:1px solid var(--line);border-radius:10px;padding:10px 13px;font-size:13.5px;color:var(--soft)}
+.why b{color:var(--ink)}
+.na{font-size:12.5px;font-weight:700;color:var(--rose-i);margin:8px 0 0}
+footer{padding:10px 0 40px;text-align:center;font-size:12.5px;color:var(--faint)}
+@media (max-width:640px){.sc-topics{grid-template-columns:repeat(2,1fr)}.sc-meta{text-align:left}.sc-score #score-num{font-size:52px}.pill{margin-left:0}}
+
+.credit{margin:14px 0 0;padding:11px 14px;border-radius:11px;background:#F7F9FC;border:1px solid var(--line);font-size:13px;color:var(--soft);line-height:1.7}
+.credit b{color:var(--ink)}
+.sc-credit{margin-top:12px;font-size:12.5px;color:var(--soft);text-align:center;line-height:1.7}
+.sc-credit b{color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="wrap"><span class="dot"></span>Module 9 Test: NumPy, Numerical Computing</div></div>
+
+<section id="screen-start" class="wrap">
+  <div class="card start">
+    <h1>Module 9 Test: NumPy, Numerical Computing</h1>
+    <p>Fifty questions on everything we covered in NumPy: ndarray basics, array creation, indexing, slicing, filtering and sorting, insert, update and delete, maths and aggregates, np.unique, broadcasting, and reshape, stack and split.</p>
+    <div class="chips">
+      <span class="chip">50 questions</span><span class="chip t">50 marks</span>
+      <span class="chip">30 code reading</span><span class="chip t">20 theory</span><span class="chip a">Passing marks: 35</span>
+    </div>
+    <ul class="rules">
+      <li>One mark per question. There is no negative marking.</li>
+      <li>The options are shuffled every time, so work out your own answers.</li>
+      <li>Use only your own head and, if you like, your notes. No sharing.</li>
+      <li>After you submit, you get a score card and the reason for every question.</li>
+      <li>Take a screenshot of the score card and send it to your instructor.</li>
+    </ul>
+    <button class="btn" id="start-btn" type="button" onclick="startTest()">Start Quiz</button>
+    <p class="note">The company name on each question shows how widely these skills are used in industry. Take this test honestly, without AI help.</p>
+    <div class="credit"><b>Instructor:</b> Siddhant Deepak Kumar Pradhan<br>Quiz created, curated and designed by <b>Siddhant Deepak Kumar Pradhan</b></div>
+  </div>
+</section>
+
+<section id="screen-quiz" hidden>
+  <div class="sticky"><div class="wrap"><b id="count">Answered 0 / 50</b><div class="bar"><i id="barfill"></i></div></div></div>
+  <div class="wrap">
+    <div id="questions"></div>
+    <div class="submitrow">
+      <p class="warn" id="warn" hidden></p>
+      <button class="btn" id="submit-btn" type="button" onclick="submitTest()">Submit Test</button>
+    </div>
+  </div>
+</section>
+
+<section id="screen-result" hidden>
+  <div class="wrap">
+    <div class="card scorecard" id="scorecard">
+      <div class="sc-top">
+        <div class="sc-score"><span id="score-num">0</span><span class="out">/ 50</span></div>
+        <div class="sc-meta">
+          <span class="band-chip" id="band-title">-</span>
+          <div class="sc-date" id="sc-date"></div>
+          <div class="sc-pass">Passing marks: 35 out of 50</div>
+        </div>
+      </div>
+      <p class="sc-msg" id="band-msg"></p>
+      <div class="sc-split">
+        <div><span>Code questions</span><b id="code-score">0 / 30</b></div>
+        <div><span>Theory questions</span><b id="theory-score">0 / 20</b></div>
+      </div>
+      <div class="sc-topics" id="sc-topics"></div>
+      <div class="sc-credit">Module 9 Test: NumPy, Numerical Computing<br><b>Instructor:</b> Siddhant Deepak Kumar Pradhan<br>Quiz created, curated and designed by <b>Siddhant Deepak Kumar Pradhan</b></div>
+      <div class="sc-foot">Take a screenshot of this card and share it with your instructor.</div>
+    </div>
+    <h2 class="rev-title">Review: every question with the reason</h2>
+    <p class="rev-sub">Green is the correct answer. Red is your pick when it was wrong.</p>
+    <div id="review"></div>
+    <footer>Module 9 Test: NumPy, Numerical Computing | Instructor: Siddhant Deepak Kumar Pradhan | Quiz created, curated and designed by Siddhant Deepak Kumar Pradhan</footer>
+  </div>
+</section>
+
+<script>
+const DATA = [{"id": 1, "t": 0, "kind": "code", "company": "Apple", "year": 2022, "code": "import numpy as np\na = np.array([1, 2, 3, 4])\nprint(a.shape, a.ndim)", "text": "What does this code print?", "opts": ["(4,) 1", "(1, 4) 2", "(4, 1) 2", "4 1"], "reason": "A flat list of four numbers becomes a 1D array. Its shape is the tuple (4,) and ndim is 1."}, {"id": 2, "t": 0, "kind": "theory", "company": "Wipro", "year": 2019, "code": "", "text": "Why are NumPy arrays much faster than Python lists for numeric work?", "opts": ["They keep same-type values in one memory block and run the maths in compiled C code", "They store each number as text, which the CPU can compress and scan quickly", "They automatically send every operation to the GPU, whatever hardware you have", "They skip type checking by keeping every value as a generic Python object"], "reason": "An ndarray keeps one data type in one memory block, so loops run in fast compiled code instead of slow Python objects. That is why data pipelines use it."}, {"id": 3, "t": 0, "kind": "code", "company": "IBM", "year": 2021, "code": "import numpy as np\na = np.array([1, 2, 3.5])\nprint(a.dtype, a[0])", "text": "What does this code print?", "opts": ["float64 1.0", "int64 1", "float64 1", "object 1.0"], "reason": "One float in the list makes NumPy upcast the whole array to float64, so the first element prints as 1.0."}, {"id": 4, "t": 0, "kind": "theory", "company": "Capgemini", "year": 2018, "code": "", "text": "Which ndarray attribute tells you the total number of elements?", "opts": ["size", "shape", "ndim", "itemsize"], "reason": "size is the count of all elements. shape gives the dimensions, ndim gives how many dimensions, itemsize gives bytes per element."}, {"id": 5, "t": 0, "kind": "code", "company": "Google", "year": 2020, "code": "import numpy as np\na = np.array([[1, 2, 3], [4, 5, 6]])\nprint(a.shape, a.size)", "text": "What does this code print?", "opts": ["(2, 3) 6", "(3, 2) 6", "(2, 3) 5", "(6,) 6"], "reason": "Two rows and three columns give shape (2, 3). The total number of elements is 2 x 3 = 6."}, {"id": 6, "t": 0, "kind": "theory", "company": "HDFC Bank", "year": 2022, "code": "", "text": "What does NumPy do with np.array([1, 2.5, 'a'])?", "opts": ["It converts everything to one string type, because an ndarray holds a single dtype", "It keeps every element in its own original type, as a Python list would", "It raises a TypeError because mixed types are not allowed in any array", "It silently drops the string and keeps only the numbers"], "reason": "An ndarray has exactly one dtype. With a string in the mix, NumPy upcasts every value to a string type."}, {"id": 7, "t": 1, "kind": "code", "company": "Citi", "year": 2019, "code": "import numpy as np\nprint(np.zeros((2, 3)).shape, np.ones(3).sum())", "text": "What does this code print?", "opts": ["(2, 3) 3.0", "(3, 2) 3.0", "(2, 3) 3", "(2, 3) 0.0"], "reason": "zeros((2, 3)) has shape (2, 3). ones(3) is three floats of 1.0, so the sum is 3.0, not the integer 3."}, {"id": 8, "t": 1, "kind": "theory", "company": "Meta", "year": 2021, "code": "", "text": "What is the default dtype of np.zeros(3)?", "opts": ["float64", "int64", "int32", "bool"], "reason": "zeros, ones and empty create float64 arrays unless you pass dtype explicitly."}, {"id": 9, "t": 1, "kind": "code", "company": "Oracle", "year": 2018, "code": "import numpy as np\nprint(np.arange(2, 11, 3))", "text": "What does this code print?", "opts": ["[2 5 8]", "[ 2  5  8 11]", "[3 6 9]", "[ 2  5  8 10]"], "reason": "arange starts at 2, steps by 3 and stops before 11. The values are 2, 5 and 8. The stop value is never included."}, {"id": 10, "t": 1, "kind": "theory", "company": "Walmart", "year": 2020, "code": "", "text": "Which call creates 10 evenly spaced values from 0 to 1, with both ends included?", "opts": ["np.linspace(0, 1, 10)", "np.arange(0, 1, 10)", "np.linspace(0, 10, 1)", "np.zeros(10)"], "reason": "linspace takes start, stop and the NUMBER of points, and includes the stop value. arange takes a step size instead."}, {"id": 11, "t": 1, "kind": "code", "company": "Cognizant", "year": 2022, "code": "import numpy as np\nprint(np.linspace(0, 1, 5))", "text": "What does this code print?", "opts": ["[0.   0.25 0.5  0.75 1.  ]", "[0.  0.2 0.4 0.6 0.8]", "[0.25 0.5  0.75 1.  ]", "[0.   0.25 0.5  0.75]"], "reason": "Five points between 0 and 1, both included, means the gap is 1/4 = 0.25. So we get 0, 0.25, 0.5, 0.75, 1."}, {"id": 12, "t": 1, "kind": "code", "company": "ICICI Bank", "year": 2019, "code": "import numpy as np\nr = np.random.rand(3, 2)\nprint(r.shape, bool((r >= 0).all() and (r < 1).all()))", "text": "What does this code print?", "opts": ["(3, 2) True", "(3, 2) False", "(2, 3) True", "(3,) True"], "reason": "np.random.rand(3, 2) gives a 3 by 2 array of floats in the range 0 up to but not including 1."}, {"id": 13, "t": 1, "kind": "theory", "company": "Infosys", "year": 2021, "code": "", "text": "Why do we call np.random.seed(42) before generating random numbers?", "opts": ["It makes the random numbers repeatable, so results can be reproduced", "It makes random number generation run faster on large arrays", "It limits every random number so that it never goes above the value 42", "It tells NumPy to create exactly 42 random numbers in the array"], "reason": "A seed fixes the starting point of the generator. Same seed, same sequence, so your analysis can be repeated and checked."}, {"id": 14, "t": 2, "kind": "code", "company": "JPMorgan Chase", "year": 2018, "code": "import numpy as np\na = np.array([10, 20, 30, 40, 50])\nprint(a[1:4])", "text": "What does this code print?", "opts": ["[20 30 40]", "[10 20 30 40]", "[20 30 40 50]", "[10 20 30]"], "reason": "Slicing a[1:4] takes positions 1, 2 and 3. The stop position 4 is excluded, so we get 20, 30, 40."}, {"id": 15, "t": 2, "kind": "theory", "company": "Accenture", "year": 2020, "code": "", "text": "For a 2D array b, which expression selects rows 0 and 2 together?", "opts": ["b[[0, 2]]", "b[0, 2]", "b[0:2]", "b[0][2]"], "reason": "Passing a list of row numbers is fancy indexing. b[0, 2] is a single element, and b[0:2] is a slice that gives rows 0 and 1."}, {"id": 16, "t": 2, "kind": "code", "company": "Royal Bank of Canada", "year": 2022, "code": "import numpy as np\nb = np.arange(12).reshape(3, 4)\nprint(b[1, 2], b[:, 0])", "text": "What does this code print?", "opts": ["6 [0 4 8]", "9 [0 4 8]", "6 [0 1 2 3]", "6 [0 1 2]"], "reason": "The array has rows [0..3], [4..7], [8..11]. b[1, 2] is row 1, column 2, which is 6. b[:, 0] is the first column: 0, 4, 8."}, {"id": 17, "t": 2, "kind": "code", "company": "Deloitte", "year": 2019, "code": "import numpy as np\na = np.array([5, 12, 7, 20, 3])\nprint(a[a > 6])", "text": "What does this code print?", "opts": ["[12  7 20]", "[12 20]", "[5 3]", "[False  True  True  True False]"], "reason": "a > 6 builds a True/False mask. Using the mask as an index keeps only the elements where it is True: 12, 7 and 20, in original order."}, {"id": 18, "t": 2, "kind": "theory", "company": "Goldman Sachs", "year": 2021, "code": "", "text": "What does np.argsort(a) return?", "opts": ["The indices that would sort the array", "The sorted values themselves", "The array sorted in place", "The number of elements out of order"], "reason": "argsort gives positions, not values. You can use them as a[np.argsort(a)] to get the sorted array, or to reorder another array the same way."}, {"id": 19, "t": 2, "kind": "code", "company": "TCS", "year": 2018, "code": "import numpy as np\na = np.array([3, 1, 2])\nprint(np.sort(a)[::-1].tolist(), a.tolist())", "text": "What does this code print?", "opts": ["[3, 2, 1] [3, 1, 2]", "[3, 2, 1] [3, 2, 1]", "[1, 2, 3] [1, 2, 3]", "[1, 2, 3] [3, 1, 2]"], "reason": "np.sort returns a sorted COPY, and [::-1] reverses it. The original array a is untouched."}, {"id": 20, "t": 2, "kind": "code", "company": "Microsoft", "year": 2020, "code": "import numpy as np\na = np.arange(5)\nb = a[1:3]\nb[0] = 99\nprint(a)", "text": "What does this code print?", "opts": ["[ 0 99  2  3  4]", "[0 1 2 3 4]", "[ 0 99 99  3  4]", "[99  1  2  3  4]"], "reason": "A basic slice is a VIEW of the same memory, not a copy. Changing b[0] changes a[1], so a becomes 0, 99, 2, 3, 4."}, {"id": 21, "t": 2, "kind": "theory", "company": "Amazon", "year": 2022, "code": "", "text": "How do you get a slice that is independent, so editing it does not change the original array?", "opts": ["Call .copy() on the slice, for example a[1:3].copy()", "Wrap the slice in a tuple, for example tuple(a[1:3])", "Add a second colon to the slice, for example a[1:3:]", "Do nothing, because slices are always independent copies already"], "reason": "Basic slices share memory with the original. .copy() makes a new array, so edits stay separate."}, {"id": 22, "t": 3, "kind": "code", "company": "Netflix", "year": 2019, "code": "import numpy as np\na = np.array([1, 2, 3])\nb = np.insert(a, 1, 99)\nprint(b.tolist(), a.tolist())", "text": "What does this code print?", "opts": ["[1, 99, 2, 3] [1, 2, 3]", "[1, 2, 99, 3] [1, 2, 3]", "[1, 99, 2, 3] [1, 99, 2, 3]", "[1, 99, 3] [1, 99, 3]"], "reason": "np.insert(a, 1, 99) puts 99 BEFORE index 1 and returns a new array. The original a does not change."}, {"id": 23, "t": 3, "kind": "theory", "company": "Morgan Stanley", "year": 2021, "code": "", "text": "Why are np.insert, np.append and np.delete slow when used again and again in a loop on a large array?", "opts": ["An ndarray has a fixed size, so each call builds a new array and copies all the data", "They sort the whole array every time, so the cost grows with the number of items", "They convert the array to a Python list first and write it to disk for safety", "They lock the array so that other programs on the machine cannot read it"], "reason": "Arrays cannot grow in place. Every insert, append or delete allocates new memory and copies, so collect values in a list and convert once if you can."}, {"id": 24, "t": 3, "kind": "code", "company": "SAP", "year": 2018, "code": "import numpy as np\na = np.array([1, 2, 3, 4, 5])\na[a % 2 == 0] = 0\nprint(a.tolist())", "text": "What does this code print?", "opts": ["[1, 0, 3, 0, 5]", "[0, 2, 0, 4, 0]", "[1, 2, 3, 4, 5]", "[0, 0, 0, 0, 0]"], "reason": "The mask a % 2 == 0 is True for 2 and 4. Assigning through the mask updates only those positions to 0."}, {"id": 25, "t": 3, "kind": "code", "company": "Flipkart", "year": 2020, "code": "import numpy as np\na = np.array([10, 20, 30, 40])\nprint(np.delete(a, [0, 2]).tolist())", "text": "What does this code print?", "opts": ["[20, 40]", "[10, 30]", "[30, 40]", "[20, 30, 40]"], "reason": "np.delete removes the elements at positions 0 and 2, which are 10 and 30. The values 20 and 40 remain."}, {"id": 26, "t": 3, "kind": "code", "company": "Apple", "year": 2023, "code": "import numpy as np\na = np.array([1, 2])\nb = np.append(a, [3, 4])\nprint(b.tolist(), len(a))", "text": "What does this code print?", "opts": ["[1, 2, 3, 4] 2", "[1, 2, 3, 4] 4", "[1, 2] 2", "[1, 2, [3, 4]] 2"], "reason": "np.append returns a NEW flat array with the values added at the end. The original a still has length 2."}, {"id": 27, "t": 3, "kind": "theory", "company": "Wipro", "year": 2024, "code": "", "text": "What does np.delete(a, 1) do to the original array a?", "opts": ["Nothing. It returns a new array and leaves a unchanged", "It removes the element at index 1 from a itself, in place", "It deletes the variable a from memory so it can no longer be used", "It raises an error, because a NumPy array can never be changed"], "reason": "np.delete never edits in place. Assign the result back, a = np.delete(a, 1), if you want to keep it."}, {"id": 28, "t": 4, "kind": "code", "company": "IBM", "year": 2025, "code": "import numpy as np\na = np.array([1, 2, 3])\nb = np.array([4, 5, 6])\nprint((a * b).tolist(), a @ b)", "text": "What does this code print?", "opts": ["[4, 10, 18] 32", "[5, 7, 9] 32", "[4, 10, 18] 15", "[4, 10, 18] 21"], "reason": "a * b multiplies element by element: 4, 10, 18. The @ operator is the dot product: 4 + 10 + 18 = 32."}, {"id": 29, "t": 4, "kind": "theory", "company": "Capgemini", "year": 2023, "code": "", "text": "What does a * b do for two NumPy arrays of the same shape?", "opts": ["It multiplies element by element", "It performs matrix multiplication", "It repeats array a b times", "It raises an error unless one is a scalar"], "reason": "NumPy operators work element-wise. For matrix multiplication use @ or np.dot."}, {"id": 30, "t": 4, "kind": "code", "company": "Google", "year": 2024, "code": "import numpy as np\na = np.array([[1, 2], [3, 4]])\nprint(a.sum(axis=0).tolist(), a.sum(axis=1).tolist())", "text": "What does this code print?", "opts": ["[4, 6] [3, 7]", "[3, 7] [4, 6]", "[10] [10]", "[4, 6] [4, 6]"], "reason": "axis=0 adds down the rows, giving column totals 1+3 and 2+4. axis=1 adds across the columns, giving row totals 1+2 and 3+4."}, {"id": 31, "t": 4, "kind": "theory", "company": "HDFC Bank", "year": 2025, "code": "", "text": "In a 2D array, what does a.mean(axis=0) give you?", "opts": ["One mean per column", "One mean per row", "A single mean for the whole array", "The mean of the first row only"], "reason": "axis=0 collapses the rows, so you get a result for each column. axis=1 would give one value per row."}, {"id": 32, "t": 4, "kind": "code", "company": "Citi", "year": 2023, "code": "import numpy as np\na = np.array([2, 4, 4, 4, 5, 5, 7, 9])\nprint(a.mean(), a.std())", "text": "What does this code print?", "opts": ["5.0 2.0", "5.0 2.138089935299395", "5.0 4.0", "4.5 2.0"], "reason": "The mean is 40 / 8 = 5.0. np.std uses the population formula (ddof=0), so the variance is 32 / 8 = 4.0 and std is 2.0."}, {"id": 33, "t": 4, "kind": "theory", "company": "Meta", "year": 2024, "code": "", "text": "What does np.argmax(a) return?", "opts": ["The index of the largest value", "The largest value itself", "The number of maximum values", "The array sorted from largest to smallest"], "reason": "argmax gives a position. a.max() gives the value. They are used together when you need both where and how big."}, {"id": 34, "t": 4, "kind": "code", "company": "Oracle", "year": 2025, "code": "import numpy as np\na = np.array([4, 9, 16])\nprint(np.sqrt(a).tolist(), a.max() - a.min())", "text": "What does this code print?", "opts": ["[2.0, 3.0, 4.0] 12", "[2, 3, 4] 12", "[2.0, 3.0, 4.0] 20", "[16, 81, 256] 12"], "reason": "sqrt works on every element and always returns floats: 2.0, 3.0, 4.0. The range is 16 - 4 = 12."}, {"id": 35, "t": 5, "kind": "code", "company": "Walmart", "year": 2023, "code": "import numpy as np\na = np.array([3, 1, 2, 3, 1, 3])\nu, c = np.unique(a, return_counts=True)\nprint(u.tolist(), c.tolist())", "text": "What does this code print?", "opts": ["[1, 2, 3] [2, 1, 3]", "[3, 1, 2] [3, 2, 1]", "[1, 2, 3] [1, 1, 1]", "[1, 2, 3] [3, 1, 2]"], "reason": "unique returns the sorted distinct values 1, 2, 3. The counts line up with them: 1 appears twice, 2 once, 3 three times."}, {"id": 36, "t": 5, "kind": "theory", "company": "Cognizant", "year": 2024, "code": "", "text": "What does np.unique(a) return by default?", "opts": ["The sorted distinct values", "The distinct values in order of first appearance", "How many distinct values there are", "A True/False mask of duplicates"], "reason": "np.unique always sorts its output. If you need first-appearance order, ask for return_index=True and sort those positions."}, {"id": 37, "t": 5, "kind": "code", "company": "ICICI Bank", "year": 2025, "code": "import numpy as np\na = np.array([\"b\", \"a\", \"b\", \"c\"])\nprint(len(np.unique(a)), np.unique(a)[0])", "text": "What does this code print?", "opts": ["3 a", "4 a", "3 b", "2 b"], "reason": "The distinct values are a, b, c, so there are 3. They are sorted, so the first one is a."}, {"id": 38, "t": 5, "kind": "theory", "company": "Infosys", "year": 2023, "code": "", "text": "Which np.unique argument gives how many times each distinct value appears?", "opts": ["return_counts=True", "return_index=True", "return_inverse=True", "axis=0"], "reason": "return_counts=True adds a second array of counts. return_index gives first positions, and return_inverse helps rebuild the original."}, {"id": 39, "t": 6, "kind": "code", "company": "JPMorgan Chase", "year": 2024, "code": "import numpy as np\na = np.array([[1], [2], [3]])\nb = np.array([10, 20])\nprint((a + b).shape)", "text": "What does this code print?", "opts": ["(3, 2)", "(3,)", "(2,)", "(2, 3)"], "reason": "Shapes (3, 1) and (2,) stretch to a common shape. The size-1 axis grows to 2 and the 1D array acts as a row, giving (3, 2)."}, {"id": 40, "t": 6, "kind": "theory", "company": "Accenture", "year": 2025, "code": "", "text": "What is the broadcasting rule for comparing two array shapes?", "opts": ["Compare from the last dimension backwards. Sizes must be equal, or one of them must be 1", "Compare from the first dimension forwards. Both arrays must have the same number of dimensions", "Both arrays must have exactly the same shape, otherwise NumPy raises an error", "The smaller array is cut down to the size of the bigger one before the operation"], "reason": "NumPy lines the shapes up from the right. Each pair must match or contain a 1, and missing leading dimensions are treated as 1."}, {"id": 41, "t": 6, "kind": "code", "company": "Royal Bank of Canada", "year": 2023, "code": "import numpy as np\na = np.array([[1, 2, 3], [4, 5, 6]])\nprint((a + np.array([10, 20, 30])).tolist())", "text": "What does this code print?", "opts": ["[[11, 22, 33], [14, 25, 36]]", "[[11, 12, 13], [24, 25, 26]]", "[[11, 22, 33], [44, 55, 66]]", "[[11, 22, 33], [4, 5, 6]]"], "reason": "The row [10, 20, 30] is broadcast to every row of a. Row 1 becomes 11, 22, 33 and row 2 becomes 14, 25, 36."}, {"id": 42, "t": 6, "kind": "code", "company": "Deloitte", "year": 2024, "code": "import numpy as np\na = np.ones((2, 3))\nb = np.ones(2)\ntry:\n    print((a + b).shape)\nexcept ValueError:\n    print(\"mismatch\")", "text": "What does this code print?", "opts": ["mismatch", "(2, 3)", "(2,)", "(3, 2)"], "reason": "Comparing from the right, 3 and 2 are different and neither is 1, so broadcasting fails and NumPy raises ValueError."}, {"id": 43, "t": 6, "kind": "theory", "company": "Goldman Sachs", "year": 2025, "code": "", "text": "Why is broadcasting useful in data work?", "opts": ["It lets you combine arrays of different shapes without Python loops or manual copies", "It converts every array to the same dtype before the operation starts", "It sorts the data first so that the operation runs in less memory", "It saves the intermediate array to disk so large data can be reused later"], "reason": "Broadcasting does the stretching virtually, so adding a row of offsets to a whole table is one fast line."}, {"id": 44, "t": 6, "kind": "code", "company": "TCS", "year": 2023, "code": "import numpy as np\ndata = np.array([[1, 2], [3, 4]])\nprint((data - data.mean(axis=0)).tolist())", "text": "What does this code print?", "opts": ["[[-1.0, -1.0], [1.0, 1.0]]", "[[-1.5, -0.5], [0.5, 1.5]]", "[[1.0, 1.0], [-1.0, -1.0]]", "[[-2.0, -3.0], [0.0, 1.0]]"], "reason": "The column means are [2.0, 3.0]. Broadcasting subtracts that row from each row: 1-2, 2-3 gives -1, -1 and 3-2, 4-3 gives 1, 1."}, {"id": 45, "t": 7, "kind": "code", "company": "Microsoft", "year": 2024, "code": "import numpy as np\na = np.arange(6).reshape(2, 3)\nprint(a.T.shape, a.reshape(-1).tolist())", "text": "What does this code print?", "opts": ["(3, 2) [0, 1, 2, 3, 4, 5]", "(2, 3) [0, 1, 2, 3, 4, 5]", "(3, 2) [0, 3, 1, 4, 2, 5]", "(6,) [0, 1, 2, 3, 4, 5]"], "reason": "The transpose swaps the axes, so (2, 3) becomes (3, 2). reshape(-1) flattens in row order: 0 to 5."}, {"id": 46, "t": 7, "kind": "theory", "company": "Amazon", "year": 2025, "code": "", "text": "Why does np.arange(10).reshape(3, 4) fail?", "opts": ["3 x 4 = 12, which does not equal the 10 elements in the array", "reshape only works on arrays that already have two dimensions", "arange creates read-only arrays that can never be reshaped", "The new shape must always have fewer rows than columns"], "reason": "reshape never adds or drops data, so the product of the new shape must equal the total size."}, {"id": 47, "t": 7, "kind": "code", "company": "Netflix", "year": 2023, "code": "import numpy as np\na = np.array([1, 2])\nb = np.array([3, 4])\nprint(np.vstack([a, b]).shape, np.hstack([a, b]).shape)", "text": "What does this code print?", "opts": ["(2, 2) (4,)", "(4,) (2, 2)", "(2, 2) (2, 2)", "(1, 4) (4,)"], "reason": "vstack stacks the arrays as rows, giving 2 by 2. hstack on 1D arrays joins them end to end, giving a flat array of 4."}, {"id": 48, "t": 7, "kind": "theory", "company": "Morgan Stanley", "year": 2024, "code": "", "text": "Which function joins two arrays side by side, as extra columns?", "opts": ["np.hstack", "np.vstack", "np.split", "np.unique"], "reason": "hstack is horizontal stacking (columns). vstack is vertical stacking (rows). split does the opposite job of cutting an array apart."}, {"id": 49, "t": 7, "kind": "code", "company": "SAP", "year": 2025, "code": "import numpy as np\na = np.arange(8)\nparts = np.split(a, 4)\nprint(len(parts), parts[1].tolist())", "text": "What does this code print?", "opts": ["4 [2, 3]", "2 [2, 3]", "4 [4, 5]", "4 [1, 2]"], "reason": "Splitting 8 items into 4 equal parts gives pieces of 2: [0,1], [2,3], [4,5], [6,7]. The second piece is [2, 3]."}, {"id": 50, "t": 7, "kind": "code", "company": "Flipkart", "year": 2023, "code": "import numpy as np\na = np.arange(12).reshape(3, 4)\nprint(a.reshape(2, -1).shape)", "text": "What does this code print?", "opts": ["(2, 6)", "(2, 4)", "(6, 2)", "(2, 2)"], "reason": "The -1 means 'work it out'. 12 elements in 2 rows means 6 columns, so the shape is (2, 6)."}];
+const TOPICS = ["ndarray Basics", "Array Creation", "Index, Slice, Sort", "Insert, Update, Delete", "Math and Aggregates", "np.unique", "Broadcasting", "Reshape, Stack, Split"];
+const BANDS = {"top": ["Perfect score", "Fifty out of fifty. Every single answer is right, in both the code questions and the theory questions. That is rare, and it tells me you read code line by line and know exactly why it behaves that way. Take your screenshot and be proud. Then help a classmate who is still finding their feet, because teaching others is the best way to stay sharp. You have earned this."], "out": ["Passed | Outstanding", "Outstanding work. This states you have understood NumPy very well, at the level a real data team expects. Predicting the output of code is hard and you did it almost without a slip. Read the reasons for the one or two you missed, because small details like these are exactly what interviewers love to ask. Carry this confidence into the next module and keep building."], "great": ["Passed | Great work", "Great work. This is a strong result, and it states you have understood NumPy well. You do not just remember the syntax, you see what the code does. That is exactly what companies look for. Go through the reasons for the questions you missed, close those small gaps, and the top band is well within your reach. Keep practising, you are close."], "good": ["Passed | Good job", "Good job done. This states you have understood the topic well. You can read and write NumPy code, build arrays, slice and filter them, use broadcasting and aggregates, and reshape data for a pipeline. A few answers slipped, so read the reasons below and fix them. With a little more practice you will move up a band quickly. Keep going."], "fail": ["Needs improvement", "This is not the end, it is a map. You are below the passing marks of 35 this time, so look at the topic scores on this card, find the weak ones, and go back to the notes for those topics. Rerun every snippet in VS Code or Jupyter and print the shapes, not just the values. Come back in a few days and beat this score. Every good data engineer got these wrong once, and the ones who kept going are the ones working at the big companies on your questions. You can do this."]};
+const MODULE = "Module 9";
+const PASS = 35, LETTERS = ["A", "B", "C", "D"];
+let state = [];
+let warned = false;
+
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function shuffle(a){ for (let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+function show(id){ ["screen-start","screen-quiz","screen-result"].forEach(function(s){ document.getElementById(s).hidden = (s !== id); }); }
+
+function qHead(q, i){
+  return '<div class="qhead"><span class="qnum">Q' + (i + 1) + '</span><span class="mod">' + MODULE + ' | ' + esc(TOPICS[q.t]) + '</span>' +
+         '<span class="kind ' + q.kind + '">' + (q.kind === "code" ? "CODE" : "THEORY") + '</span>' +
+         '<span class="pill">[' + esc(q.company) + ' ' + q.year + ']</span></div>';
+}
+function qBody(q){
+  return (q.code ? '<pre class="code">' + esc(q.code) + '</pre>' : '') + '<p class="qtext">' + esc(q.text) + '</p>';
+}
+
+function startTest(){
+  state = DATA.map(function(q){ return { q: q, order: shuffle([0, 1, 2, 3]), picked: -1 }; });
+  let h = "";
+  state.forEach(function(s, i){
+    h += '<div class="card qcard" id="q' + i + '">' + qHead(s.q, i) + qBody(s.q) + '<div class="opts">';
+    s.order.forEach(function(orig, pos){
+      h += '<button type="button" class="opt" data-q="' + i + '" data-pos="' + pos + '"><span class="letter">' + LETTERS[pos] +
+           '</span><span class="otext' + (s.q.kind === "code" ? " mono" : "") + '">' + esc(s.q.opts[orig]) + '</span></button>';
+    });
+    h += '</div></div>';
+  });
+  document.getElementById("questions").innerHTML = h;
+  warned = false;
+  updateCount();
+  show("screen-quiz");
+  window.scrollTo(0, 0);
+}
+
+document.getElementById("questions").addEventListener("click", function(e){
+  const btn = e.target.closest(".opt");
+  if (!btn) return;
+  const i = Number(btn.getAttribute("data-q")), pos = Number(btn.getAttribute("data-pos"));
+  state[i].picked = pos;
+  document.querySelectorAll("#q" + i + " .opt").forEach(function(b){ b.classList.toggle("sel", Number(b.getAttribute("data-pos")) === pos); });
+  document.getElementById("warn").hidden = true;
+  warned = false;
+  updateCount();
+});
+
+function updateCount(){
+  const n = state.filter(function(s){ return s.picked >= 0; }).length;
+  document.getElementById("count").textContent = "Answered " + n + " / " + state.length;
+  document.getElementById("barfill").style.width = (n / state.length * 100) + "%";
+}
+
+function band(score){
+  let k, cls;
+  if (score === 50){ k = "top"; cls = "band-top"; }
+  else if (score >= 45){ k = "out"; cls = "band-top"; }
+  else if (score >= 40){ k = "great"; cls = "band-great"; }
+  else if (score >= PASS){ k = "good"; cls = "band-good"; }
+  else { k = "fail"; cls = "band-fail"; }
+  return { cls: cls, title: BANDS[k][0], msg: BANDS[k][1] };
+}
+function stamp(){
+  try { return new Date().toLocaleString("en-IN", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" }); }
+  catch (err) { return new Date().toString(); }
+}
+
+function submitTest(){
+  const unanswered = state.filter(function(s){ return s.picked < 0; }).length;
+  if (unanswered > 0 && !warned){
+    const w = document.getElementById("warn");
+    w.textContent = "You have " + unanswered + " unanswered question" + (unanswered > 1 ? "s" : "") + ". Unanswered questions get no marks. Click Submit Test again to finish.";
+    w.hidden = false; warned = true; return;
+  }
+  let score = 0, codeScore = 0, theoryScore = 0;
+  const tScore = TOPICS.map(function(){ return 0; }), tTotal = TOPICS.map(function(){ return 0; });
+  let review = "";
+  state.forEach(function(s, i){
+    const q = s.q, correctPos = s.order.indexOf(0), ok = (s.picked === correctPos);
+    tTotal[q.t]++;
+    if (ok){ score++; tScore[q.t]++; if (q.kind === "code") codeScore++; else theoryScore++; }
+    review += '<div class="card qcard">' + qHead(q, i) + qBody(q) + '<div class="opts">';
+    s.order.forEach(function(orig, pos){
+      let cls = "opt dim", tag = "";
+      if (pos === correctPos){ cls = "opt ok"; tag = (s.picked === pos) ? "Your answer, correct" : "Correct answer"; }
+      else if (pos === s.picked){ cls = "opt bad"; tag = "Your answer"; }
+      review += '<div class="' + cls + '"><span class="letter">' + LETTERS[pos] + '</span><span class="otext' + (q.kind === "code" ? " mono" : "") + '">' + esc(q.opts[orig]) + '</span>' + (tag ? '<span class="tag">' + tag + '</span>' : '') + '</div>';
+    });
+    review += '</div>' + (s.picked < 0 ? '<p class="na">You did not answer this question.</p>' : '') + '<div class="why"><b>Why:</b> ' + esc(q.reason) + '</div></div>';
+  });
+  const b = band(score);
+  document.getElementById("score-num").textContent = score;
+  const bt = document.getElementById("band-title"); bt.textContent = b.title; bt.className = "band-chip " + b.cls;
+  document.getElementById("band-msg").textContent = b.msg;
+  document.getElementById("sc-date").textContent = "Submitted on " + stamp();
+  document.getElementById("code-score").textContent = codeScore + " / 30";
+  document.getElementById("theory-score").textContent = theoryScore + " / 20";
+  document.getElementById("sc-topics").innerHTML = TOPICS.map(function(name, t){
+    const pct = tScore[t] / tTotal[t], c = pct >= 0.8 ? "g" : (pct >= 0.5 ? "m" : "r");
+    return '<div class="tchip ' + c + '" data-topic="' + t + '">' + esc(name) + '<b>' + tScore[t] + ' / ' + tTotal[t] + '</b></div>';
+  }).join("");
+  document.getElementById("review").innerHTML = review;
+  show("screen-result");
+  window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>
